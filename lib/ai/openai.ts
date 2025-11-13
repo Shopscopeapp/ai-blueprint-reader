@@ -51,42 +51,29 @@ Analyze blueprints, CAD drawings, and architectural plans with precision. Extrac
     const urlLower = imageUrl.toLowerCase();
     const isPDF = contentType.includes("pdf") || urlLower.endsWith(".pdf");
     
-    // If PDF, convert pages to images (up to 10 pages for multi-page support)
+    // If PDF, try to convert first page using Sharp (limited PDF support)
     if (isPDF) {
       try {
-        const { convertPDFToImages } = await import("@/lib/pdf/converter");
-        const pdfImages = await convertPDFToImages(buffer, 10); // Convert up to 10 pages
+        const sharp = await import("sharp");
+        // Sharp can convert first page of PDF to PNG
+        const pdfImage = await sharp.default(buffer)
+          .png()
+          .toBuffer();
         
-        // Create image content array for all pages
-        imageContent = pdfImages.map((img) => ({
+        const imageBase64 = pdfImage.toString("base64");
+        imageContent = [{
           type: "image_url" as const,
           image_url: {
-            url: `data:${img.mimeType};base64,${img.imageBase64}`,
+            url: `data:image/png;base64,${imageBase64}`,
           },
-        }));
+        }];
         
-        console.log(`Converted PDF with ${pdfImages.length} page(s) to images`);
+        console.log("Converted PDF first page to image using Sharp");
       } catch (pdfError) {
-        console.error("Failed to convert PDF to images:", pdfError);
-        // Fallback: Try to convert just the first page using a simpler method
-        try {
-          const { convertPDFToImages } = await import("@/lib/pdf/converter");
-          const firstPage = await convertPDFToImages(buffer, 1); // Just first page
-          if (firstPage.length > 0) {
-            imageContent = [{
-              type: "image_url" as const,
-              image_url: {
-                url: `data:${firstPage[0].mimeType};base64,${firstPage[0].imageBase64}`,
-              },
-            }];
-            console.log("Using first page only due to conversion error");
-          } else {
-            throw new Error("Could not convert any PDF pages");
-          }
-        } catch (fallbackError) {
-          console.error("Fallback PDF conversion also failed:", fallbackError);
-          throw new Error("PDF conversion failed. Please convert your PDF to an image format (PNG, JPEG) and try again.");
-        }
+        console.error("Failed to convert PDF with Sharp:", pdfError);
+        // If Sharp fails, send the PDF URL directly - GPT-4o might handle it
+        // Or provide a helpful error message
+        throw new Error("PDF conversion failed. Please convert your PDF to an image format (PNG, JPEG) for best results, or try uploading the PDF directly.");
       }
     } else {
       // For images, determine MIME type and convert to base64

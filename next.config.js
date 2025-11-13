@@ -1,5 +1,3 @@
-const path = require('path');
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
@@ -10,22 +8,9 @@ const nextConfig = {
       },
     ],
   },
-  webpack: (config, { isServer, webpack }) => {
-    if (isServer) {
-      // Disable pdfjs-dist worker for server-side
-      config.resolve.alias = {
-        ...config.resolve.alias,
-        'pdfjs-dist/build/pdf.worker.js': false,
-      };
-    } else {
-      // For client-side, replace canvas with an empty stub module
-      // react-pdf uses pdfjs-dist but doesn't need canvas on the client
-      config.resolve.alias = {
-        ...config.resolve.alias,
-        'canvas': path.resolve(__dirname, 'lib/canvas-stub.js'),
-      };
-      
-      // Use fallback to ignore canvas completely on client
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      // For client-side, exclude canvas (react-pdf doesn't need it)
       config.resolve.fallback = {
         ...(config.resolve.fallback || {}),
         'canvas': false,
