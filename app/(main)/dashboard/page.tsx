@@ -255,7 +255,7 @@ export default async function DashboardPage() {
               </h3>
               <div className="h-1 bg-gradient-to-r from-cyan-400 to-transparent w-32" />
             </div>
-            {blueprints.length > 0 && (
+            {blueprints && blueprints.length > 0 && (
               <Link
                 href="/upload"
                 className="text-cyan-400/80 hover:text-cyan-400 transition-colors font-mono text-sm tracking-wider flex items-center space-x-2"
@@ -265,7 +265,7 @@ export default async function DashboardPage() {
               </Link>
             )}
           </div>
-          {blueprints.length === 0 ? (
+          {!blueprints || blueprints.length === 0 ? (
             <div className="relative bg-[#0a0e27]/60 border-2 border-cyan-400/30 rounded-2xl p-16 text-center backdrop-blur-sm overflow-hidden">
               <div className="absolute top-0 right-0 w-32 h-32 border-t-2 border-r-2 border-cyan-400/20" />
               <div className="absolute bottom-0 left-0 w-32 h-32 border-b-2 border-l-2 border-cyan-400/20" />
@@ -380,7 +380,7 @@ export default async function DashboardPage() {
         )}
 
         {/* Comparison Selector - Floating Button */}
-        {blueprints.length >= 2 && (
+        {blueprints && blueprints.length >= 2 && (
           <ComparisonSelector blueprints={blueprints} />
         )}
       </div>
