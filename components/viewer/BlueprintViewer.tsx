@@ -1,18 +1,7 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
-import dynamic from "next/dynamic";
+import { useState, useCallback } from "react";
 import { ZoomIn, ZoomOut, RotateCw, Maximize2, Minimize2, Download, Ruler, Grid } from "lucide-react";
-import "@/app/pdf-viewer.css";
-
-// Dynamically import react-pdf to avoid bundling canvas on client
-const PDFViewer = dynamic(
-  () => import("./PDFViewerInternal"),
-  { 
-    ssr: false,
-    loading: () => <div className="text-cyan-300 font-mono p-8">Loading PDF viewer...</div>
-  }
-);
 
 interface BlueprintViewerProps {
   url: string;
@@ -150,15 +139,28 @@ export default function BlueprintViewer({ url, fileType }: BlueprintViewerProps)
             </div>
           </div>
         </div>
-        <PDFViewer
-          url={url}
-          scale={scale}
-          rotation={rotation}
-          pageNumber={pageNumber}
-          onLoadSuccess={onDocumentLoadSuccess}
-          onPageChange={setPageNumber}
-          showGrid={showGrid}
-        />
+        <div className="flex-1 overflow-auto border border-cyan-400/20 rounded-lg bg-[#0a0e27]/40 p-4 relative">
+          {showGrid && (
+            <div
+              className="absolute inset-0 pointer-events-none opacity-20 z-10"
+              style={{
+                backgroundImage: 'linear-gradient(rgba(59, 130, 246, 0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(59, 130, 246, 0.3) 1px, transparent 1px)',
+                backgroundSize: '20px 20px',
+              }}
+            />
+          )}
+          <div className="w-full h-full">
+            <iframe
+              src={`${url}#page=${pageNumber}&zoom=${scale * 100}`}
+              className="w-full h-full border-0"
+              style={{
+                transform: `rotate(${rotation}deg)`,
+                minHeight: '600px',
+              }}
+              title="PDF Viewer"
+            />
+          </div>
+        </div>
       </div>
     );
   }
