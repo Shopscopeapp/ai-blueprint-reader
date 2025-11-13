@@ -83,9 +83,9 @@ Return JSON in this format:
     }
 
     // Map results back to full blueprint data
-    const results = searchResults.results
+    const results = (searchResults?.results || [])
       .map((result: any) => {
-        const blueprint = blueprints.find((bp: any) => bp.id === result.blueprintId);
+        const blueprint = blueprints?.find((bp: any) => bp.id === result.blueprintId);
         if (!blueprint) return null;
         return {
           ...blueprint,
