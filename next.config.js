@@ -10,18 +10,11 @@ const nextConfig = {
   },
   webpack: (config, { isServer, webpack }) => {
     if (!isServer) {
-      // For client-side, exclude canvas (react-pdf doesn't need it)
-      config.resolve.fallback = {
-        ...(config.resolve.fallback || {}),
-        'canvas': false,
-      };
-      
-      // Use NormalModuleReplacementPlugin to replace canvas imports with empty module
+      // Completely ignore canvas imports on client-side
       config.plugins.push(
-        new webpack.NormalModuleReplacementPlugin(
-          /^canvas$/,
-          require.resolve('./lib/canvas-empty.js')
-        )
+        new webpack.IgnorePlugin({
+          resourceRegExp: /^canvas$/,
+        })
       );
     }
     
