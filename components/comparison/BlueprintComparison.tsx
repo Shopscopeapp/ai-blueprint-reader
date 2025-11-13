@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import {
   GitCompare,
   Loader2,
@@ -50,7 +50,7 @@ export default function BlueprintComparison({
   );
   const [error, setError] = useState("");
 
-  const compareBlueprints = async () => {
+  const compareBlueprints = useCallback(async () => {
     setLoading(true);
     setError("");
     try {
@@ -76,11 +76,11 @@ export default function BlueprintComparison({
     } finally {
       setLoading(false);
     }
-  };
+  }, [blueprint1.id, blueprint2.id]);
 
   useEffect(() => {
     compareBlueprints();
-  }, []);
+  }, [compareBlueprints]);
 
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">

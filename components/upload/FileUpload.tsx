@@ -190,7 +190,7 @@ export default function FileUpload() {
               </h4>
               <p className="text-cyan-400/70 font-mono text-sm leading-relaxed">
                 Upload your architectural drawing, CAD file, or blueprint image. 
-                Once uploaded, you'll be able to ask AI questions about dimensions, 
+                Once uploaded, you&apos;ll be able to ask AI questions about dimensions, 
                 materials, design elements, and construction details.
               </p>
             </div>

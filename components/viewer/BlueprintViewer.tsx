@@ -246,6 +246,7 @@ export default function BlueprintViewer({ url, fileType }: BlueprintViewerProps)
                 transition: "transform 0.2s",
               }}
             >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={url}
                 alt="Blueprint"

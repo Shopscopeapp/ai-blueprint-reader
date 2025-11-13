@@ -183,7 +183,7 @@ export default function ContactPage() {
                     MESSAGE SENT
                   </h3>
                   <p className="text-cyan-200/80 font-mono text-sm mb-6">
-                    We'll get back to you soon!
+                    We&apos;ll get back to you soon!
                   </p>
                   <button
                     onClick={() => setSubmitted(false)}
