@@ -42,7 +42,8 @@ export async function extractTextWithTextract(
       throw new Error(`Failed to fetch image: ${imageResponse.statusText}`);
     }
     
-    let imageBuffer = Buffer.from(await imageResponse.arrayBuffer());
+    const arrayBuffer = await imageResponse.arrayBuffer();
+    let imageBuffer = Buffer.from(arrayBuffer) as Buffer;
     
     // Check content type and convert if needed
     const contentType = imageResponse.headers.get("content-type") || "";
@@ -66,9 +67,9 @@ export async function extractTextWithTextract(
       // Try to convert using sharp (for images only, not PDFs)
       try {
         const sharp = await import("sharp");
-        imageBuffer = await sharp.default(imageBuffer)
+        imageBuffer = (await sharp.default(imageBuffer)
           .png()
-          .toBuffer();
+          .toBuffer()) as Buffer;
       } catch (convertError) {
         console.warn("Could not convert image format, trying Textract anyway");
       }
