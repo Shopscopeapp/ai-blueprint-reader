@@ -8,15 +8,16 @@ if (!process.env.AWS_ACCESS_KEY_ID || !process.env.AWS_SECRET_ACCESS_KEY) {
   console.warn("AWS credentials not set. Textract OCR will be unavailable.");
 }
 
-const textractClient = process.env.AWS_ACCESS_KEY_ID
-  ? new TextractClient({
-      region: process.env.AWS_REGION || "us-east-1",
-      credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-      },
-    })
-  : null;
+const textractClient = 
+  process.env.AWS_ACCESS_KEY_ID && process.env.AWS_SECRET_ACCESS_KEY
+    ? new TextractClient({
+        region: process.env.AWS_REGION || "us-east-1",
+        credentials: {
+          accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+          secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+        },
+      })
+    : null;
 
 /**
  * Extract text and structured data from PDF/image using AWS Textract
