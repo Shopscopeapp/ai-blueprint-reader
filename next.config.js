@@ -1,3 +1,5 @@
+const path = require('path');
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
@@ -20,7 +22,7 @@ const nextConfig = {
       // react-pdf uses pdfjs-dist but doesn't need canvas on the client
       config.resolve.alias = {
         ...config.resolve.alias,
-        'canvas': require.resolve('./lib/canvas-stub.js'),
+        'canvas': path.resolve(__dirname, 'lib/canvas-stub.js'),
       };
       
       // Use fallback to ignore canvas completely on client
