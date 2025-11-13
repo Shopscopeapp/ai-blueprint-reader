@@ -3,6 +3,7 @@
  * Handles multi-page PDFs by converting each page to a PNG image
  * Uses canvas for rendering (requires canvas package)
  * 
+ * SERVER-ONLY: This module should only be imported in API routes or server components
  * For server-side use in Next.js, we disable the worker
  */
 export async function convertPDFToImages(
