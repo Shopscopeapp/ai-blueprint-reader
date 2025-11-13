@@ -8,7 +8,7 @@ const nextConfig = {
       },
     ],
   },
-  webpack: (config, { isServer }) => {
+  webpack: (config, { isServer, webpack }) => {
     if (isServer) {
       // Disable pdfjs-dist worker for server-side
       config.resolve.alias = {
@@ -25,17 +25,16 @@ const nextConfig = {
       
       // Use fallback to ignore canvas completely on client
       config.resolve.fallback = {
-        ...config.resolve.fallback,
+        ...(config.resolve.fallback || {}),
         'canvas': false,
       };
       
-      // Exclude canvas from client bundles
-      config.externals = config.externals || [];
-      if (Array.isArray(config.externals)) {
-        config.externals.push('canvas');
-      } else if (typeof config.externals === 'object') {
-        config.externals.canvas = false;
-      }
+      // Use NormalModuleReplacementPlugin to replace canvas with empty module
+      config.plugins.push(
+        new webpack.NormalModuleReplacementPlugin(/^canvas$/, (resource) => {
+          resource.request = false;
+        })
+      );
     }
     
     return config;
