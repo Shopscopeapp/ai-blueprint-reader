@@ -330,7 +330,7 @@ export default async function DashboardPage() {
         </div>
 
         {/* Recent Conversations */}
-        {conversations.length > 0 && (
+        {conversations && conversations.length > 0 && (
           <div className="animate-fade-in">
             <div className="flex items-center justify-between mb-6">
               <div>
