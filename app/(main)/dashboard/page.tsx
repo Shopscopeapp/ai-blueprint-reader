@@ -83,7 +83,7 @@ export default async function DashboardPage() {
   const stats = {
     blueprints: totalBlueprints || 0,
     conversations: totalConversations || 0,
-    recentActivity: conversations.length,
+    recentActivity: conversations?.length || 0,
     avgPerDay: blueprints.length > 0 ? Math.round((blueprints.length / 30) * 10) / 10 : 0,
   };
 
