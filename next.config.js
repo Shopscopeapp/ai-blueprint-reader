@@ -8,14 +8,14 @@ const nextConfig = {
       },
     ],
   },
-  webpack: (config, { isServer, webpack }) => {
+  webpack: (config, { isServer }) => {
     if (!isServer) {
-      // Completely ignore canvas imports on client-side
-      config.plugins.push(
-        new webpack.IgnorePlugin({
-          resourceRegExp: /^canvas$/,
-        })
-      );
+      // Replace canvas with a stub module on client-side
+      const path = require('path');
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        'canvas': path.resolve(__dirname, 'lib/canvas-stub.js'),
+      };
     }
     
     return config;
