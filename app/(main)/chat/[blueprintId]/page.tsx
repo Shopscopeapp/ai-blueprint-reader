@@ -219,7 +219,7 @@ export default async function ChatPage({ params }: PageProps) {
             {/* Insights Panel */}
             <InsightsPanel 
               blueprint={blueprint} 
-              conversations={allConversations}
+              conversations={allConversations || []}
               conversationId={conversation?.id}
               blueprintId={blueprint.id}
             />
