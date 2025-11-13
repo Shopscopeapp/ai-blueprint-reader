@@ -16,11 +16,11 @@ const nextConfig = {
         'pdfjs-dist/build/pdf.worker.js': false,
       };
     } else {
-      // For client-side, exclude canvas from bundling (it's a native Node.js module)
+      // For client-side, replace canvas with an empty stub module
       // react-pdf uses pdfjs-dist but doesn't need canvas on the client
       config.resolve.alias = {
         ...config.resolve.alias,
-        'canvas': false,
+        'canvas': require.resolve('./lib/canvas-stub.js'),
       };
       
       // Use fallback to ignore canvas completely on client
@@ -28,13 +28,6 @@ const nextConfig = {
         ...(config.resolve.fallback || {}),
         'canvas': false,
       };
-      
-      // Use NormalModuleReplacementPlugin to replace canvas with empty module
-      config.plugins.push(
-        new webpack.NormalModuleReplacementPlugin(/^canvas$/, (resource) => {
-          resource.request = false;
-        })
-      );
     }
     
     return config;
